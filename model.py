@@ -20,7 +20,14 @@ def parse_training_data():
                         else:
                             ham_email_dictionary[word] = 1
 
-            print(ham_email_dictionary)
+                    if 'spam' in file:
+                        if word in spam_email_dictionary:
+                            spam_email_dictionary[word] = spam_email_dictionary[word] + 1
+                        else:
+                            spam_email_dictionary[word] = 1
+
+    print(ham_email_dictionary)
+    print(spam_email_dictionary)
 
 
 
