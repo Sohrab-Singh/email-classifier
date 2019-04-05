@@ -7,6 +7,8 @@ ham_word_probability = {}
 spam_word_probability = {}
 ham_words_count = 0
 spam_words_count = 0
+ham_file_count = 0
+spam_file_count = 0
 probabilty_of_ham = 0
 probabilty_of_spam = 0
 vocabulary = set()
@@ -14,6 +16,10 @@ vocabulary = set()
 
 def parse_training_data():
     path = os.getcwd() + '/resources/training data'
+    global ham_file_count
+    global spam_file_count
+    global ham_words_count
+    global spam_words_count
     for file in os.listdir(path):
         if file.endswith('.txt'):
             if 'ham' in file:
