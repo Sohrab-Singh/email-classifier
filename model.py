@@ -11,6 +11,7 @@ ham_file_count = 0
 spam_file_count = 0
 probabilty_of_ham = 0.5
 probabilty_of_spam = 0
+delta = 0.5
 vocabulary = set()
 
 
@@ -50,11 +51,10 @@ def parse_training_data():
             f.close()
     probabilty_of_ham = ham_file_count/(ham_file_count + spam_file_count)
     probabilty_of_spam = spam_file_count/(ham_file_count + spam_file_count)
-
     build_training_model()
 
 
-def find_smoothed_conditional_probabilities(word, delta=0):
+def find_smoothed_conditional_probabilities(word):
     ham_email_word_count = ham_email_dictionary[word] if word in ham_email_dictionary else 0
     spam_email_word_count = spam_email_dictionary[word] if word in spam_email_dictionary else 0
     ham_word_probability[word] = (ham_email_word_count + delta)/(ham_words_count * (1 + delta))
@@ -65,8 +65,24 @@ def get_model_word_info(line_count, word):
     return '{}  {}  {}  {}  {}  {}\n'.format(line_count, word, ham_email_dictionary.get(word, 0), ham_word_probability[word], spam_email_dictionary.get(word, 0), spam_word_probability[word])
 
 
+def get_ham_probability():
+    return probabilty_of_ham
+
+
+def get_spam_probability():
+    return probabilty_of_spam
+
+
+def get_ham_words_count():
+    return ham_words_count
+
+
+def get_spam_words_count():
+    return spam_words_count
+
+
 def build_training_model():
-    f = open(os.getcwd() + '/resources/baseline-model.txt', 'w+')
+    f = open(os.getcwd() + '/resources/model.txt', 'w+')
     line_count = 0
     for word in vocabulary:
         find_smoothed_conditional_probabilities(word)
