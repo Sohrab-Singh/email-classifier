@@ -1,8 +1,8 @@
 from model import *
 from classifier import *
+from experimentfilter import ExperimentFilter
 import numpy as np
 import matplotlib.pyplot as plt
-
 
 def baseline_experiment():
     parse_training_data()
@@ -10,17 +10,17 @@ def baseline_experiment():
 
 
 def word_length_filtering_experiment():
-    parse_training_data(1)
-    classify_test_data(1)
+    parse_training_data(ExperimentFilter.WORD_LENGTH)
+    classify_test_data(ExperimentFilter.WORD_LENGTH)
 
 
 def smoothing_experiment():
-    x = [round(i,1) for i in np.linspace(0.1,1,11)]
+    x = [round(i, 1) for i in np.linspace(0.1, 1, 11)]
     y = []
     print(x)
     for i in x:
-        parse_training_data(0,i)
-        y.append(classify_test_data(0,i))
+        parse_training_data(ExperimentFilter.NONE, i)
+        y.append(classify_test_data(ExperimentFilter.NONE, i))
     print(y)
     plt.ylabel('Correct classification count')
     plt.xlabel('Smoothing factor')

@@ -1,6 +1,6 @@
 from model import *
 from math import log10
-
+from experimentfilter import ExperimentFilter
 
 def classify_email(file_path, delta):
 	ham_score = log10(get_ham_probability())
@@ -17,9 +17,9 @@ def classify_email(file_path, delta):
 	return 'ham' if ham_score > spam_score else 'spam', ham_score, spam_score
 
 
-def classify_test_data(is_word_filtering=0,delta=0.5):
+def classify_test_data(filter=ExperimentFilter.NONE, delta=0.5):
 	path = os.getcwd() + '/resources/test data'
-	if is_word_filtering:
+	if filter is ExperimentFilter.WORD_LENGTH:
 		f = open(os.getcwd() + '/resources/wordlength-result.txt', 'w+')
 	else:
 		f = open(os.getcwd() + '/resources/baseline-result.txt', 'w+')

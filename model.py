@@ -1,5 +1,6 @@
 import os
 import re
+from experimentfilter import ExperimentFilter
 
 ham_email_dictionary = {}
 spam_email_dictionary = {}
@@ -11,11 +12,11 @@ ham_file_count = 0
 spam_file_count = 0
 probabilty_of_ham = 0
 probabilty_of_spam = 0
-# delta = 0.5
+
 vocabulary = set()
 
 
-def parse_training_data(is_word_filtering=0,delta=0.5):
+def parse_training_data(filters=ExperimentFilter.NONE, delta=0.5):
     path = os.getcwd() + '/resources/training data'
     global ham_file_count
     global spam_file_count
@@ -32,7 +33,7 @@ def parse_training_data(is_word_filtering=0,delta=0.5):
             f = open(path + '/' + file, "r", encoding='latin-1')
             file_data_string = f.read().lower()
             words = re.split('[^a-zA-Z]', file_data_string)
-            if is_word_filtering:
+            if filter is ExperimentFilter.WORD_LENGTH:
                 words = [x for x in words if len(x) > 2 and len(x) < 9]
             for word in words:
                 if word is not '':
@@ -53,7 +54,7 @@ def parse_training_data(is_word_filtering=0,delta=0.5):
             f.close()
     probabilty_of_ham = ham_file_count/(ham_file_count + spam_file_count)
     probabilty_of_spam = spam_file_count/(ham_file_count + spam_file_count)
-    build_training_model(is_word_filtering,delta)
+    build_training_model(filter, delta)
 
 
 def find_smoothed_conditional_probabilities(word, delta):
@@ -83,8 +84,8 @@ def get_spam_words_count():
     return spam_words_count
 
 
-def build_training_model(is_word_filtering, delta):
-    if is_word_filtering:
+def build_training_model(filter=ExperimentFilter.NONE, delta=0.5):
+    if filter is ExperimentFilter.WORD_LENGTH:
         f = open(os.getcwd() + '/resources/wordlength-model.txt', 'w+')
     else:
         f = open(os.getcwd() + '/resources/baseline-model.txt', 'w+')
