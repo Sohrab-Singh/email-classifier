@@ -9,6 +9,11 @@ def baseline_experiment():
     classify_test_data()
 
 
+def stop_words_filtering_experiment():
+    parse_training_data(ExperimentFilter.STOP_WORDS)
+    classify_test_data(ExperimentFilter.STOP_WORDS)
+
+
 def word_length_filtering_experiment():
     parse_training_data(ExperimentFilter.WORD_LENGTH)
     classify_test_data(ExperimentFilter.WORD_LENGTH)

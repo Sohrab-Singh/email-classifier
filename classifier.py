@@ -19,7 +19,9 @@ def classify_email(file_path, delta):
 
 def classify_test_data(filter=ExperimentFilter.NONE, delta=0.5):
 	path = os.getcwd() + '/resources/test data'
-	if filter is ExperimentFilter.WORD_LENGTH:
+	if filter is ExperimentFilter.STOP_WORDS:
+		f = open(os.getcwd() + '/resources/stopword-result.txt', 'w+')
+	elif filter is ExperimentFilter.WORD_LENGTH:
 		f = open(os.getcwd() + '/resources/wordlength-result.txt', 'w+')
 	else:
 		f = open(os.getcwd() + '/resources/baseline-result.txt', 'w+')
@@ -29,7 +31,7 @@ def classify_test_data(filter=ExperimentFilter.NONE, delta=0.5):
 		if file.endswith('.txt'):
 			line_counter = line_counter + 1
 			file_category = 'ham' if 'ham' in file else 'spam'
-			email_category, ham_score, spam_score = classify_email(path + '/' + file,delta)
+			email_category, ham_score, spam_score = classify_email(path + '/' + file, delta)
 			result = 'right' if file_category == email_category else 'wrong'
 			correct_result_counter = (correct_result_counter + 1) if result is 'right' else correct_result_counter
 			f.write('{}  {}  {}  {}  {}  {}  {}\n'.format(line_counter, file, email_category, ham_score, spam_score, file_category,result))
