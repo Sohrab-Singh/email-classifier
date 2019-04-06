@@ -1,6 +1,7 @@
 from model import *
 from math import log10
 
+
 def classify_email(file_path):
 	ham_score = log10(get_ham_probability())
 	spam_score = log10(get_spam_probability())
@@ -16,9 +17,12 @@ def classify_email(file_path):
 	return 'ham' if ham_score > spam_score else 'spam', ham_score, spam_score
 
 
-def classify_test_data():
+def classify_test_data(is_word_filtering=0):
 	path = os.getcwd() + '/resources/test data'
-	f = open(os.getcwd() + '/resources/baseline-result.txt', 'w+')
+	if is_word_filtering:
+		f = open(os.getcwd() + '/resources/wordlength-result.txt', 'w+')
+	else:
+		f = open(os.getcwd() + '/resources/baseline-result.txt', 'w+')
 	line_counter = 0
 	for file in os.listdir(path):
 		if file.endswith('.txt'):

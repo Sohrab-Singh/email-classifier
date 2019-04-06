@@ -9,13 +9,13 @@ ham_words_count = 0
 spam_words_count = 0
 ham_file_count = 0
 spam_file_count = 0
-probabilty_of_ham = 0.5
+probabilty_of_ham = 0
 probabilty_of_spam = 0
 delta = 0.5
 vocabulary = set()
 
 
-def parse_training_data():
+def parse_training_data(is_word_filtering = 0):
     path = os.getcwd() + '/resources/training data'
     global ham_file_count
     global spam_file_count
@@ -32,6 +32,8 @@ def parse_training_data():
             f = open(path + '/' + file, "r", encoding='latin-1')
             file_data_string = f.read().lower()
             words = re.split('[^a-zA-Z]', file_data_string)
+            if is_word_filtering:
+                words = [x for x in words if len(x) > 2 and len(x) < 9]
             for word in words:
                 if word is not '':
                     vocabulary.add(word)
@@ -51,7 +53,7 @@ def parse_training_data():
             f.close()
     probabilty_of_ham = ham_file_count/(ham_file_count + spam_file_count)
     probabilty_of_spam = spam_file_count/(ham_file_count + spam_file_count)
-    build_training_model()
+    build_training_model(is_word_filtering)
 
 
 def find_smoothed_conditional_probabilities(word):
@@ -81,8 +83,11 @@ def get_spam_words_count():
     return spam_words_count
 
 
-def build_training_model():
-    f = open(os.getcwd() + '/resources/model.txt', 'w+')
+def build_training_model(is_word_filtering = 0):
+    if is_word_filtering:
+        f = open(os.getcwd() + '/resources/wordlength-model.txt', 'w+')
+    else:
+        f = open(os.getcwd() + '/resources/baseline-model.txt', 'w+')
     line_count = 0
     for word in vocabulary:
         find_smoothed_conditional_probabilities(word)

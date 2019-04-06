@@ -1,5 +1,4 @@
-from model import *
-from classifier import *
+from experiments import *
 
-parse_training_data()
-classify_test_data()
+# baseline_experiment()
+word_length_filtering_experiment()
