@@ -16,7 +16,7 @@ probabilty_of_spam = 0
 vocabulary = set()
 
 
-def parse_training_data(filter=ExperimentFilter.NONE, delta=0.5):
+def parse_training_data(filter=ExperimentFilter.NONE):
     path = os.getcwd() + '/resources/training data'
     global ham_file_count
     global spam_file_count
@@ -33,11 +33,7 @@ def parse_training_data(filter=ExperimentFilter.NONE, delta=0.5):
             f = open(path + '/' + file, "r", encoding='latin-1')
             file_data_string = f.read().lower()
             words = re.split('[^a-zA-Z]', file_data_string)
-            if filter is ExperimentFilter.STOP_WORDS:
-                stop_words = parse_stop_words_vocabulary()
-                words = [x for x in words if x not in stop_words]
-            elif filter is ExperimentFilter.WORD_LENGTH:
-                words = [x for x in words if len(x) > 2 and len(x) < 9]
+            words = parse_filtered_words(words, filter)
             for word in words:
                 if word is not '':
                     vocabulary.add(word)
@@ -57,7 +53,6 @@ def parse_training_data(filter=ExperimentFilter.NONE, delta=0.5):
             f.close()
     probabilty_of_ham = ham_file_count/(ham_file_count + spam_file_count)
     probabilty_of_spam = spam_file_count/(ham_file_count + spam_file_count)
-    build_training_model(filter, delta)
 
 
 def parse_stop_words_vocabulary():
@@ -65,6 +60,16 @@ def parse_stop_words_vocabulary():
     stop_words_data = f.read().lower()
     stop_words = re.split('[^a-zA-Z]', stop_words_data)
     return stop_words
+
+
+def parse_filtered_words(words, filter):
+    if filter is ExperimentFilter.STOP_WORDS:
+        stop_words = parse_stop_words_vocabulary()
+        words = [x for x in words if x not in stop_words]
+    elif filter is ExperimentFilter.WORD_LENGTH:
+        words = [x for x in words if len(x) > 2 and len(x) < 9]
+    
+    return words
 
 
 def find_smoothed_conditional_probabilities(word, delta):
