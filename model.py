@@ -72,6 +72,25 @@ def parse_filtered_words(words, filter):
     return words
 
 
+def sort_filter_word_count(word):
+    return ham_email_dictionary.get(word, 0) + spam_email_dictionary.get(word, 0)
+
+
+def filter_infrequent_words(filter, frequency):
+    global vocabulary
+    if filter is ExperimentFilter.INFREQUENT_WORDS_FREQUENCY_COUNT:
+        if frequency == 1:
+            vocabulary = [x for x in vocabulary if ham_email_dictionary.get(x, 0) + spam_email_dictionary.get(x, 0) != frequency]
+        else:
+            vocabulary = [x for x in vocabulary if ham_email_dictionary.get(x, 0) + spam_email_dictionary.get(x, 0) > frequency]
+    elif filter is ExperimentFilter.INFREQUENT_WORDS_FREQUENCY_PERCENTAGE:
+        vocabulary = sorted(vocabulary, key=sort_filter_word_count)
+        n = int(frequency * len(vocabulary) / 100)
+        del vocabulary[:n]
+    vocabulary = set(vocabulary)
+    return vocabulary
+
+
 def find_smoothed_conditional_probabilities(word, delta):
     ham_email_word_count = ham_email_dictionary[word] if word in ham_email_dictionary else 0
     spam_email_word_count = spam_email_dictionary[word] if word in spam_email_dictionary else 0
