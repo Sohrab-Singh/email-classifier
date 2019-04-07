@@ -125,12 +125,16 @@ def build_training_model(filter=ExperimentFilter.NONE, delta=0.5):
         f = open(os.getcwd() + '/resources/wordlength-model.txt', 'w+')
     else:
         f = open(os.getcwd() + '/resources/baseline-model.txt', 'w+')
+
+    global vocabulary
+    vocabulary = sorted(vocabulary)
     line_count = 0
     for word in vocabulary:
         find_smoothed_conditional_probabilities(word, delta)
         line_count += 1
         f.write(get_model_word_info(line_count, word))
     f.close()
+    vocabulary = set(vocabulary)
 
 
 
