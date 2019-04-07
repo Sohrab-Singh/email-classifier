@@ -2,6 +2,7 @@ from model import *
 from math import log10
 from experimentfilter import ExperimentFilter
 
+
 def classify_email(file_path, delta):
 	ham_score = log10(get_ham_probability())
 	spam_score = log10(get_spam_probability())

@@ -4,6 +4,7 @@ from experimentfilter import ExperimentFilter
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def baseline_experiment():
     parse_training_data()
     build_training_model()
@@ -52,8 +53,6 @@ def infrequent_word_filtering_experiment():
     data.sort(key=sort_tuple_list_key)
     x = [tuple[0] for tuple in data]
     y = [tuple[1] for tuple in data]
-    print(x)
-    print(y)
     plt.ylabel('Correct classification count')
     plt.xlabel('No of words in vocabulary')
     plt.title('Performance against Words in Vocabulary')
@@ -64,12 +63,10 @@ def infrequent_word_filtering_experiment():
 def smoothing_experiment():
     x = [round(i, 1) for i in np.linspace(0.1, 1, 11)]
     y = []
-    print(x)
     for i in x:
         parse_training_data()
         build_training_model(ExperimentFilter.NONE, i)
         y.append(classify_test_data(ExperimentFilter.NONE, i))
-    print(y)
     plt.ylabel('Correct classification count')
     plt.xlabel('Smoothing factor')
     plt.title('Performance against Smoothing factor')
